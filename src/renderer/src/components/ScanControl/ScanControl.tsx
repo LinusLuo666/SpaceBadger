@@ -39,9 +39,7 @@ export function ScanControl(): JSX.Element {
         <div className="flex items-center gap-3 mb-4">
           <div className="text-red-500 text-2xl">⚠️</div>
           <div>
-            <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">
-              扫描失败
-            </h3>
+            <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">扫描失败</h3>
             <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
               {error}
             </p>

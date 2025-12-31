@@ -34,9 +34,7 @@ export function Sidebar(): JSX.Element {
           {!sidebarCollapsed && (
             <div className="flex items-center gap-2">
               <span className="text-2xl">🦡</span>
-              <h1 className="text-lg font-bold text-light-text dark:text-dark-text">
-                SpaceBadger
-              </h1>
+              <h1 className="text-lg font-bold text-light-text dark:text-dark-text">SpaceBadger</h1>
             </div>
           )}
           {sidebarCollapsed && <span className="text-2xl mx-auto">🦡</span>}

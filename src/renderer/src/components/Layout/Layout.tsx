@@ -12,10 +12,11 @@ import { ScanControl } from '../ScanControl'
 export function Layout(): JSX.Element {
   const { currentView, theme, setTheme } = useUIStore()
 
-  // 初始化主题
+  // 初始化主题（仅在首次挂载时应用）
   useEffect(() => {
     // 应用当前主题设置
     setTheme(theme)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -66,9 +67,7 @@ function HistoryView(): JSX.Element {
   return (
     <div className="history-view">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
-          扫描历史
-        </h2>
+        <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">扫描历史</h2>
         <p className="text-light-text-secondary dark:text-dark-text-secondary">
           查看和管理历史扫描记录
         </p>
@@ -94,9 +93,7 @@ function CompareView(): JSX.Element {
   return (
     <div className="compare-view">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">
-          快照对比
-        </h2>
+        <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">快照对比</h2>
         <p className="text-light-text-secondary dark:text-dark-text-secondary">
           对比两个快照，查看空间变化趋势
         </p>
@@ -129,9 +126,7 @@ function SettingsView(): JSX.Element {
     <div className="settings-view">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">设置</h2>
-        <p className="text-light-text-secondary dark:text-dark-text-secondary">
-          配置应用偏好设置
-        </p>
+        <p className="text-light-text-secondary dark:text-dark-text-secondary">配置应用偏好设置</p>
       </div>
 
       <div className="bg-white dark:bg-dark-bg rounded-lg shadow-md p-6">
@@ -187,9 +182,7 @@ function SettingsView(): JSX.Element {
                 className="w-4 h-4"
               />
               <div className="flex-1">
-                <div className="font-medium text-light-text dark:text-dark-text">
-                  跟随系统
-                </div>
+                <div className="font-medium text-light-text dark:text-dark-text">跟随系统</div>
                 <div className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
                   根据系统设置自动切换
                 </div>
@@ -200,9 +193,7 @@ function SettingsView(): JSX.Element {
         </div>
 
         <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-2">
-            关于
-          </h3>
+          <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-2">关于</h3>
           <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
             SpaceBadger - macOS 存储分析工具
           </p>
