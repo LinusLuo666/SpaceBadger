@@ -1,7 +1,26 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { IPC_CHANNELS } from '../types/ipc'
+import { DatabaseManager } from './database/DatabaseManager'
+import type {
+  ScanStartPayload,
+  SaveSnapshotPayload,
+  LoadSnapshotsPayload,
+  LoadSnapshotByIdPayload,
+  DeleteSnapshotPayload,
+  RenameSnapshotPayload,
+  CompareSnapshotsPayload,
+  AnalyzeTrendPayload,
+  OpenInFinderPayload,
+  CopyPathPayload,
+  GetSettingPayload,
+  SetSettingPayload
+} from '../types/ipc'
+
+// 初始化数据库管理器
+let dbManager: DatabaseManager
 
 function createWindow(): void {
   // Create the browser window.
@@ -35,6 +54,147 @@ function createWindow(): void {
   }
 }
 
+// ========== 设置 IPC 处理器 ==========
+
+function setupIPCHandlers(): void {
+  // ========== System 系统相关 ==========
+
+  // 选择文件夹对话框
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_SELECT_FOLDER, async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    })
+    return result.filePaths[0]
+  })
+
+  // 在 Finder 中打开
+  ipcMain.on(IPC_CHANNELS.SYSTEM_OPEN_IN_FINDER, (_, payload: OpenInFinderPayload) => {
+    shell.showItemInFolder(payload.path)
+  })
+
+  // 复制路径到剪贴板
+  ipcMain.on(IPC_CHANNELS.SYSTEM_COPY_PATH, async (_, payload: CopyPathPayload) => {
+    const { clipboard } = await import('electron')
+    clipboard.writeText(payload.path)
+  })
+
+  // 获取应用版本
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_GET_VERSION, () => {
+    return app.getVersion()
+  })
+
+  // ========== Database 数据库相关 ==========
+
+  // 保存快照
+  ipcMain.handle(IPC_CHANNELS.DB_SAVE_SNAPSHOT, async (_, payload: SaveSnapshotPayload) => {
+    try {
+      dbManager.saveSnapshot(payload.snapshot)
+      console.log('[Main] Snapshot saved:', payload.snapshot.id)
+    } catch (error) {
+      console.error('[Main] Failed to save snapshot:', error)
+      throw error
+    }
+  })
+
+  // 加载快照列表
+  ipcMain.handle(IPC_CHANNELS.DB_LOAD_SNAPSHOTS, async (_, payload?: LoadSnapshotsPayload) => {
+    try {
+      const result = dbManager.loadSnapshots(payload?.limit, payload?.offset)
+      console.log(`[Main] Loaded ${result.snapshots.length} snapshots`)
+      return result
+    } catch (error) {
+      console.error('[Main] Failed to load snapshots:', error)
+      throw error
+    }
+  })
+
+  // 根据 ID 加载快照
+  ipcMain.handle(
+    IPC_CHANNELS.DB_LOAD_SNAPSHOT_BY_ID,
+    async (_, payload: LoadSnapshotByIdPayload) => {
+      try {
+        const snapshot = dbManager.loadSnapshotById(payload.id)
+        console.log('[Main] Loaded snapshot:', payload.id)
+        return snapshot
+      } catch (error) {
+        console.error('[Main] Failed to load snapshot:', error)
+        throw error
+      }
+    }
+  )
+
+  // 删除快照
+  ipcMain.handle(IPC_CHANNELS.DB_DELETE_SNAPSHOT, async (_, payload: DeleteSnapshotPayload) => {
+    try {
+      dbManager.deleteSnapshot(payload.id)
+      console.log('[Main] Deleted snapshot:', payload.id)
+    } catch (error) {
+      console.error('[Main] Failed to delete snapshot:', error)
+      throw error
+    }
+  })
+
+  // 重命名快照
+  ipcMain.handle(IPC_CHANNELS.DB_RENAME_SNAPSHOT, async (_, payload: RenameSnapshotPayload) => {
+    try {
+      dbManager.renameSnapshot(payload.id, payload.name)
+      console.log('[Main] Renamed snapshot:', payload.id, 'to', payload.name)
+    } catch (error) {
+      console.error('[Main] Failed to rename snapshot:', error)
+      throw error
+    }
+  })
+
+  // 获取设置
+  ipcMain.handle(IPC_CHANNELS.DB_GET_SETTING, async (_, payload: GetSettingPayload) => {
+    try {
+      const value = dbManager.getSetting(payload.key)
+      console.log('[Main] Got setting:', payload.key)
+      return value
+    } catch (error) {
+      console.error('[Main] Failed to get setting:', error)
+      throw error
+    }
+  })
+
+  // 保存设置
+  ipcMain.handle(IPC_CHANNELS.DB_SET_SETTING, async (_, payload: SetSettingPayload) => {
+    try {
+      dbManager.setSetting(payload.key, payload.value)
+      console.log('[Main] Set setting:', payload.key)
+    } catch (error) {
+      console.error('[Main] Failed to set setting:', error)
+      throw error
+    }
+  })
+
+  // ========== Scanner 扫描相关（暂未实现，占位）==========
+
+  ipcMain.on(IPC_CHANNELS.SCAN_START, (_, payload: ScanStartPayload) => {
+    console.log('[Main] TODO: Implement scan start for path:', payload.path)
+    // TODO: 实现 ScannerManager 后调用 scannerManager.startScan(payload.path, payload.excludePatterns)
+  })
+
+  ipcMain.on(IPC_CHANNELS.SCAN_CANCEL, () => {
+    console.log('[Main] TODO: Implement scan cancel')
+    // TODO: 实现 ScannerManager 后调用 scannerManager.cancelScan()
+  })
+
+  // ========== Comparison 对比分析相关（暂未实现，占位）==========
+
+  ipcMain.handle(IPC_CHANNELS.COMPARE_SNAPSHOTS, async (_, payload: CompareSnapshotsPayload) => {
+    console.log('[Main] TODO: Implement snapshot comparison:', payload)
+    // TODO: 实现 ComparisonEngine 后返回对比结果
+    throw new Error('Comparison not yet implemented')
+  })
+
+  ipcMain.handle(IPC_CHANNELS.ANALYZE_TREND, async (_, payload: AnalyzeTrendPayload) => {
+    console.log('[Main] TODO: Implement trend analysis:', payload)
+    // TODO: 实现 TrendAnalyzer 后返回趋势数据
+    throw new Error('Trend analysis not yet implemented')
+  })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -49,8 +209,11 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  // 初始化数据库
+  dbManager = new DatabaseManager()
+
+  // 设置 IPC 处理器
+  setupIPCHandlers()
 
   createWindow()
 
