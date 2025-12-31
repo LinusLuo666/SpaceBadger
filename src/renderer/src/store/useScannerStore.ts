@@ -5,7 +5,6 @@
 
 import { create } from 'zustand'
 import type { Snapshot, ScanProgress } from '../../../types'
-import { IPC_CHANNELS } from '../../../types/ipc'
 
 interface ScannerState {
   // 状态
@@ -37,8 +36,6 @@ export const useScannerStore = create<ScannerState>((set, get) => {
 
     // 监听扫描完成
     window.electron.scanner.onComplete((data) => {
-      const { currentSnapshot } = get()
-
       // 设置快照
       set({
         currentSnapshot: data.snapshot,

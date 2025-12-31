@@ -101,7 +101,7 @@ export const useUIStore = create<UIState>()(
 
 // 监听系统主题变化
 if (typeof window !== 'undefined') {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     const { theme, setTheme } = useUIStore.getState()
     if (theme === 'auto') {
       setTheme('auto') // 重新应用主题
