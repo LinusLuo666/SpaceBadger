@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { IPC_CHANNELS } from '../types/ipc'
 import { DatabaseManager } from './database/DatabaseManager'
+import { ScannerManager } from './scanner/ScannerManager'
 import type {
   ScanStartPayload,
   SaveSnapshotPayload,
@@ -21,6 +22,8 @@ import type {
 
 // 初始化数据库管理器
 let dbManager: DatabaseManager
+// 初始化扫描管理器
+let scannerManager: ScannerManager
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,6 +55,9 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // 初始化扫描管理器
+  scannerManager = new ScannerManager(mainWindow)
 }
 
 // ========== 设置 IPC 处理器 ==========
@@ -168,16 +174,24 @@ function setupIPCHandlers(): void {
     }
   })
 
-  // ========== Scanner 扫描相关（暂未实现，占位）==========
+  // ========== Scanner 扫描相关 ==========
 
   ipcMain.on(IPC_CHANNELS.SCAN_START, (_, payload: ScanStartPayload) => {
-    console.log('[Main] TODO: Implement scan start for path:', payload.path)
-    // TODO: 实现 ScannerManager 后调用 scannerManager.startScan(payload.path, payload.excludePatterns)
+    console.log('[Main] Starting scan for path:', payload.path)
+    try {
+      scannerManager.startScan(payload.path, payload.excludePatterns)
+    } catch (error) {
+      console.error('[Main] Failed to start scan:', error)
+    }
   })
 
   ipcMain.on(IPC_CHANNELS.SCAN_CANCEL, () => {
-    console.log('[Main] TODO: Implement scan cancel')
-    // TODO: 实现 ScannerManager 后调用 scannerManager.cancelScan()
+    console.log('[Main] Cancelling scan')
+    try {
+      scannerManager.cancelScan()
+    } catch (error) {
+      console.error('[Main] Failed to cancel scan:', error)
+    }
   })
 
   // ========== Comparison 对比分析相关（暂未实现，占位）==========
