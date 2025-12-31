@@ -6,8 +6,10 @@
 import { useEffect } from 'react'
 import type { JSX } from 'react'
 import { useUIStore } from '../../store/useUIStore'
+import { useScannerStore } from '../../store/useScannerStore'
 import { Sidebar } from '../Sidebar'
 import { ScanControl } from '../ScanControl'
+import { VisualizationContainer } from '../VisualizationContainer'
 
 export function Layout(): JSX.Element {
   const { currentView, theme, setTheme } = useUIStore()
@@ -25,8 +27,8 @@ export function Layout(): JSX.Element {
       <Sidebar />
 
       {/* 主内容区域 */}
-      <main className="flex-1 overflow-auto">
-        <div className="container mx-auto p-6">
+      <main className="flex-1 overflow-auto flex flex-col">
+        <div className={`flex-1 ${currentView === 'scan' ? '' : 'container mx-auto p-6'}`}>
           {/* 根据当前视图渲染不同内容 */}
           {currentView === 'scan' && <ScanView />}
           {currentView === 'history' && <HistoryView />}
@@ -42,6 +44,18 @@ export function Layout(): JSX.Element {
  * 扫描视图
  */
 function ScanView(): JSX.Element {
+  const { currentSnapshot } = useScannerStore()
+
+  // 如果有当前快照，显示可视化
+  if (currentSnapshot) {
+    return (
+      <div className="scan-view h-full">
+        <VisualizationContainer snapshot={currentSnapshot} className="h-full" />
+      </div>
+    )
+  }
+
+  // 否则显示扫描控制面板
   return (
     <div className="scan-view">
       <div className="mb-6">
