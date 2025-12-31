@@ -161,7 +161,7 @@ export class DatabaseManager {
       totalSize: row.total_size,
       fileCount: row.file_count,
       folderCount: row.folder_count,
-      scanDuration: row.scan_duration,
+      scanDuration: row.scan_duration
     }))
 
     console.log(`[DatabaseManager] Loaded ${snapshots.length} snapshots (total: ${total})`)
@@ -233,7 +233,7 @@ export class DatabaseManager {
       fileCount: row.file_count,
       folderCount: row.folder_count,
       scanDuration: row.scan_duration,
-      rootNode,
+      rootNode
     }
 
     console.log(`[DatabaseManager] Loaded snapshot ${id} with ${nodes.length} folder nodes`)
@@ -328,7 +328,7 @@ export class DatabaseManager {
       fileCount: node.fileCount,
       parentPath,
       depth,
-      isAccessible: node.isAccessible,
+      isAccessible: node.isAccessible
     })
 
     // 递归添加子节点
@@ -367,7 +367,7 @@ export class DatabaseManager {
         size: row.size,
         fileCount: row.file_count,
         children: [],
-        isAccessible: row.is_accessible === 1,
+        isAccessible: row.is_accessible === 1
       })
     }
 

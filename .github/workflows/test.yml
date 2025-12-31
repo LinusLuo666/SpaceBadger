@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   unit-test:
@@ -31,11 +31,11 @@ jobs:
 
       - name: Run tests
         run: pnpm test
-        if: false  # 暂时禁用，等测试框架配置完成后启用
+        if: false # 暂时禁用，等测试框架配置完成后启用
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
-        if: false  # 等测试配置完成后启用
+        if: false # 等测试配置完成后启用
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage-final.json

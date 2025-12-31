@@ -84,17 +84,17 @@ export const useUIStore = create<UIState>()(
           currentView: 'scan',
           visualizationType: 'treemap',
           currentPath: '',
-          sidebarCollapsed: false,
+          sidebarCollapsed: false
         })
-      },
+      }
     }),
     {
       name: 'spacebadger-ui-storage', // localStorage key
       partialize: (state) => ({
         visualizationType: state.visualizationType,
         theme: state.theme,
-        sidebarCollapsed: state.sidebarCollapsed,
-      }),
+        sidebarCollapsed: state.sidebarCollapsed
+      })
     }
   )
 )

@@ -9,17 +9,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Setup
+
 ```bash
 pnpm install
 ```
 
 ### Development
+
 ```bash
 pnpm dev          # Start development server with hot reload
 pnpm start        # Start Electron in preview mode
 ```
 
 ### Type Checking
+
 ```bash
 pnpm typecheck         # Check both node and web TypeScript
 pnpm typecheck:node    # Check main/preload process types
@@ -27,12 +30,14 @@ pnpm typecheck:web     # Check renderer process types
 ```
 
 ### Code Quality
+
 ```bash
 pnpm lint              # Run ESLint
 pnpm format            # Format code with Prettier
 ```
 
 ### Building
+
 ```bash
 pnpm build             # Type check + build all processes
 pnpm build:unpack      # Build without packaging (for testing)
@@ -66,17 +71,17 @@ This is a standard Electron application with three separate processes:
 
 ### Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Desktop Framework | Electron 39 | Cross-platform desktop runtime |
-| UI Framework | React 19 | Component-based UI |
-| Language | TypeScript 5.9 | Type safety |
-| State Management | Zustand | Lightweight global state |
-| Visualization | D3.js, ECharts | Interactive charts (Treemap, Sunburst) |
-| Database | better-sqlite3 | Local snapshot storage |
-| Build Tool | electron-vite | Fast Vite-based builds |
-| Bundler | Vite 7 | Development and production bundling |
-| Code Quality | ESLint, Prettier | Linting and formatting |
+| Layer             | Technology       | Purpose                                |
+| ----------------- | ---------------- | -------------------------------------- |
+| Desktop Framework | Electron 39      | Cross-platform desktop runtime         |
+| UI Framework      | React 19         | Component-based UI                     |
+| Language          | TypeScript 5.9   | Type safety                            |
+| State Management  | Zustand          | Lightweight global state               |
+| Visualization     | D3.js, ECharts   | Interactive charts (Treemap, Sunburst) |
+| Database          | better-sqlite3   | Local snapshot storage                 |
+| Build Tool        | electron-vite    | Fast Vite-based builds                 |
+| Bundler           | Vite 7           | Development and production bundling    |
+| Code Quality      | ESLint, Prettier | Linting and formatting                 |
 
 ### Key Dependencies
 
@@ -84,7 +89,7 @@ This is a standard Electron application with three separate processes:
 - **d3**: Data visualization library for Treemap rendering
 - **echarts**: Charting library for Sunburst and trend visualizations
 - **zustand**: State management (planned for UI state)
-- **@electron-toolkit/***: Electron utilities, configs, and preload helpers
+- **@electron-toolkit/\***: Electron utilities, configs, and preload helpers
 
 ## Project Structure
 
@@ -143,6 +148,7 @@ Based on the PRD (`mac-storage-analyzer-prd.md`):
 ### IPC Communication
 
 When adding main ↔ renderer communication:
+
 1. Define handlers in `src/main/index.ts` using `ipcMain.on()` or `ipcMain.handle()`
 2. Expose safe APIs in `src/preload/index.ts` via `exposeInMainWorld()`
 3. Add TypeScript types in `src/preload/index.d.ts`
@@ -158,6 +164,7 @@ When adding main ↔ renderer communication:
 ### Database Schema
 
 The SQLite schema is defined in the PRD. Key tables:
+
 - `snapshots`: Scan metadata (id, name, scan_path, total_size, created_at)
 - `folder_nodes`: Flattened directory structure (snapshot_id, path, name, size, depth)
 - `settings`: Application preferences
@@ -174,6 +181,7 @@ Index on `snapshot_id`, `path`, and `size DESC` for performance.
 ### macOS Permissions
 
 The app requests access to Documents and Downloads folders (see `electron-builder.yml`). When implementing scanning:
+
 - Detect permission denial gracefully
 - Provide user-friendly permission request dialogs
 - Skip inaccessible directories without crashing

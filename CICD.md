@@ -9,10 +9,12 @@ SpaceBadger 使用 GitHub Actions 实现持续集成和持续部署（CI/CD）�
 ### 1. CI Workflow (`.github/workflows/ci.yml`)
 
 **触发条件：**
+
 - Push 到 `main` 或 `develop` 分支
 - Pull Request 到 `main` 或 `develop` 分支
 
 **执行任务：**
+
 - **代码质量检查**
   - ESLint 代码规范检查
   - Prettier 格式检查
@@ -24,6 +26,7 @@ SpaceBadger 使用 GitHub Actions 实现持续集成和持续部署（CI/CD）�
   - 上传构建产物（保留7天）
 
 **本地测试命令：**
+
 ```bash
 # 运行所有检查（在提交前执行）
 pnpm lint
@@ -39,10 +42,12 @@ pnpm build
 ### 2. Test Workflow (`.github/workflows/test.yml`)
 
 **触发条件：**
+
 - Push 到 `main` 或 `develop` 分支
 - Pull Request 到 `main` 或 `develop` 分支
 
 **执行任务：**
+
 - 运行单元测试
 - 生成代码覆盖率报告
 - 上传到 Codecov（可选）
@@ -50,6 +55,7 @@ pnpm build
 **状态：** ⚠️ 当前禁用，等待测试框架配置完成（计划 Week 8）
 
 **本地测试命令：**
+
 ```bash
 pnpm test                  # 运行测试
 pnpm test:coverage         # 生成覆盖率报告
@@ -60,9 +66,11 @@ pnpm test:coverage         # 生成覆盖率报告
 ### 3. Release Workflow (`.github/workflows/release.yml`)
 
 **触发条件：**
+
 - 推送以 `v*.*.*` 格式的 Git tag（如 `v1.0.0`）
 
 **执行任务：**
+
 - **多平台构建**
   - macOS: 构建 `.dmg` 安装包
   - Windows: 构建 `.exe` 安装程序
@@ -80,6 +88,7 @@ pnpm test:coverage         # 生成覆盖率报告
 ### 准备发布
 
 1. **确保代码质量**
+
    ```bash
    pnpm lint
    pnpm typecheck
@@ -88,6 +97,7 @@ pnpm test:coverage         # 生成覆盖率报告
 
 2. **更新版本号**
    编辑 `package.json`：
+
    ```json
    {
      "version": "1.0.0"
@@ -95,6 +105,7 @@ pnpm test:coverage         # 生成覆盖率报告
    ```
 
 3. **更新 CHANGELOG**（手动或使用工具）
+
    ```bash
    # 可选：使用 conventional-changelog
    pnpm exec conventional-changelog -p angular -i CHANGELOG.md -s
@@ -110,6 +121,7 @@ pnpm test:coverage         # 生成覆盖率报告
 ### 触发发布
 
 5. **创建并推送 tag**
+
    ```bash
    git tag v1.0.0
    git push origin v1.0.0
@@ -133,9 +145,9 @@ pnpm test:coverage         # 生成覆盖率报告
 
 - **main**: 生产分支，始终可发布
 - **develop**: 开发分支，集成最新功能
-- **feature/***: 功能分支，从 develop 分出
-- **bugfix/***: 修复分支，从 develop 分出
-- **hotfix/***: 紧急修复，从 main 分出
+- **feature/\***: 功能分支，从 develop 分出
+- **bugfix/\***: 修复分支，从 develop 分出
+- **hotfix/\***: 紧急修复，从 main 分出
 
 ### 工作流程
 
@@ -161,6 +173,7 @@ chore: 构建/工具配置
 ```
 
 示例：
+
 ```bash
 git commit -m "feat: 添加 Treemap 可视化组件"
 git commit -m "fix: 修复扫描进度计算错误"
@@ -174,11 +187,13 @@ git commit -m "docs: 更新 README 安装说明"
 ### GitHub Secrets 配置
 
 发布流程需要以下 secrets（自动提供）：
+
 - `GITHUB_TOKEN`: GitHub 自动生成，用于发布 Release
 
 ### 可选配置
 
 如需代码签名（macOS/Windows）：
+
 1. 访问 `Settings > Secrets and variables > Actions`
 2. 添加以下 secrets：
    - `CSC_LINK`: macOS 证书（base64）
@@ -187,6 +202,7 @@ git commit -m "docs: 更新 README 安装说明"
    - `WIN_CSC_KEY_PASSWORD`: 证书密码
 
 如需 Codecov 集成：
+
 - `CODECOV_TOKEN`: Codecov token
 
 ---
@@ -196,11 +212,13 @@ git commit -m "docs: 更新 README 安装说明"
 ### CI 失败常见原因
 
 1. **Lint 失败**
+
    ```bash
    pnpm lint --fix  # 自动修复
    ```
 
 2. **Type check 失败**
+
    ```bash
    pnpm typecheck:node
    pnpm typecheck:web
@@ -237,6 +255,7 @@ git commit -m "docs: 更新 README 安装说明"
 ### 加速 CI 构建
 
 1. **使用 pnpm 缓存**（已配置）
+
    ```yaml
    - uses: actions/setup-node@v4
      with:
@@ -254,6 +273,7 @@ git commit -m "docs: 更新 README 安装说明"
 ### 减少构建时间
 
 当前预估时间：
+
 - CI Lint & Type Check: 3-5 分钟
 - CI Build Test (单平台): 5-8 分钟
 - Release (三平台并行): 15-30 分钟

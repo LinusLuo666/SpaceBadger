@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './src/renderer/index.html',
-    './src/renderer/src/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./src/renderer/index.html', './src/renderer/src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -14,7 +11,7 @@ export default {
           growth: '#FF3B30',
           shrink: '#34C759',
           text: '#1D1D1F',
-          'text-secondary': '#86868B',
+          'text-secondary': '#86868B'
         },
         dark: {
           bg: '#1E1E1E',
@@ -22,17 +19,17 @@ export default {
           growth: '#FF453A',
           shrink: '#32D74B',
           text: '#F5F5F7',
-          'text-secondary': '#98989D',
+          'text-secondary': '#98989D'
         },
         // 目录类型颜色
         system: '#9ca3af',
         documents: '#3b82f6',
         media: '#a855f7',
         applications: '#10b981',
-        downloads: '#f59e0b',
-      },
-    },
+        downloads: '#f59e0b'
+      }
+    }
   },
   plugins: [],
-  darkMode: 'class',
+  darkMode: 'class'
 }

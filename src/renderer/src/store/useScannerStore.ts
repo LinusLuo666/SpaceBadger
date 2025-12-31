@@ -40,7 +40,7 @@ export const useScannerStore = create<ScannerState>((set, get) => {
       set({
         currentSnapshot: data.snapshot,
         isScanning: false,
-        progress: 100,
+        progress: 100
       })
 
       // 自动保存到数据库
@@ -59,7 +59,7 @@ export const useScannerStore = create<ScannerState>((set, get) => {
     window.electron.scanner.onError((data) => {
       set({
         isScanning: false,
-        error: data.error,
+        error: data.error
       })
     })
   }
@@ -90,7 +90,7 @@ export const useScannerStore = create<ScannerState>((set, get) => {
         estimatedTimeRemaining: 0,
         speed: 0,
         currentSnapshot: null,
-        error: null,
+        error: null
       })
 
       window.electron.scanner.start(path, excludePatterns)
@@ -106,7 +106,7 @@ export const useScannerStore = create<ScannerState>((set, get) => {
 
       set({
         isScanning: false,
-        progress: 0,
+        progress: 0
       })
     },
 
@@ -116,7 +116,7 @@ export const useScannerStore = create<ScannerState>((set, get) => {
         progress: data.percentage,
         processedSize: data.processedSize,
         estimatedTimeRemaining: data.estimatedTimeRemaining || 0,
-        speed: data.speed || 0,
+        speed: data.speed || 0
       })
     },
 
@@ -137,8 +137,8 @@ export const useScannerStore = create<ScannerState>((set, get) => {
         estimatedTimeRemaining: 0,
         speed: 0,
         currentSnapshot: null,
-        error: null,
+        error: null
       })
-    },
+    }
   }
 })

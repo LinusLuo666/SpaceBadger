@@ -69,12 +69,12 @@ export const useComparisonStore = create<ComparisonState>((set, get) => ({
     try {
       const result = await window.electron.comparison.compareSnapshots({
         snapshotIdA: snapshotAId,
-        snapshotIdB: snapshotBId,
+        snapshotIdB: snapshotBId
       })
 
       set({
         comparisonResult: result,
-        isComparing: false,
+        isComparing: false
       })
 
       console.log('[Comparison Store] Comparison completed successfully')
@@ -82,7 +82,7 @@ export const useComparisonStore = create<ComparisonState>((set, get) => ({
       console.error('[Comparison Store] Failed to compare snapshots:', error)
       set({
         error: '对比快照失败',
-        isComparing: false,
+        isComparing: false
       })
     }
   },
@@ -103,12 +103,12 @@ export const useComparisonStore = create<ComparisonState>((set, get) => ({
     try {
       const result = await window.electron.comparison.analyzeTrend({
         snapshotIds,
-        targetPath,
+        targetPath
       })
 
       set({
         trendData: result,
-        isAnalyzingTrend: false,
+        isAnalyzingTrend: false
       })
 
       console.log('[Comparison Store] Trend analysis completed successfully')
@@ -116,7 +116,7 @@ export const useComparisonStore = create<ComparisonState>((set, get) => ({
       console.error('[Comparison Store] Failed to analyze trend:', error)
       set({
         error: '趋势分析失败',
-        isAnalyzingTrend: false,
+        isAnalyzingTrend: false
       })
     }
   },
@@ -126,14 +126,14 @@ export const useComparisonStore = create<ComparisonState>((set, get) => ({
       snapshotAId: null,
       snapshotBId: null,
       comparisonResult: null,
-      error: null,
+      error: null
     })
   },
 
   clearTrend: () => {
     set({
       trendData: null,
-      error: null,
+      error: null
     })
-  },
+  }
 }))

@@ -49,7 +49,7 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
       set({
         snapshots: result.snapshots,
         total: result.total,
-        isLoading: false,
+        isLoading: false
       })
 
       console.log(`[Snapshot Store] Loaded ${result.snapshots.length} snapshots`)
@@ -57,7 +57,7 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
       console.error('[Snapshot Store] Failed to load snapshots:', error)
       set({
         error: '加载快照列表失败',
-        isLoading: false,
+        isLoading: false
       })
     }
   },
@@ -77,20 +77,20 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
         set({
           selectedSnapshot: snapshot,
           selectedSnapshotId: id,
-          isLoading: false,
+          isLoading: false
         })
         console.log(`[Snapshot Store] Loaded snapshot ${id}`)
       } else {
         set({
           error: '快照不存在',
-          isLoading: false,
+          isLoading: false
         })
       }
     } catch (error) {
       console.error('[Snapshot Store] Failed to load snapshot:', error)
       set({
         error: '加载快照失败',
-        isLoading: false,
+        isLoading: false
       })
     }
   },
@@ -115,7 +115,7 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
         total: state.total - 1,
         // 如果删除的是当前选中的快照，清除选中状态
         selectedSnapshotId: state.selectedSnapshotId === id ? null : state.selectedSnapshotId,
-        selectedSnapshot: state.selectedSnapshotId === id ? null : state.selectedSnapshot,
+        selectedSnapshot: state.selectedSnapshotId === id ? null : state.selectedSnapshot
       }))
 
       console.log(`[Snapshot Store] Deleted snapshot ${id}`)
@@ -141,7 +141,7 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
         selectedSnapshot:
           state.selectedSnapshot && state.selectedSnapshot.id === id
             ? { ...state.selectedSnapshot, name }
-            : state.selectedSnapshot,
+            : state.selectedSnapshot
       }))
 
       console.log(`[Snapshot Store] Renamed snapshot ${id} to "${name}"`)
@@ -159,7 +159,7 @@ export const useSnapshotStore = create<SnapshotState>((set, get) => ({
   clearSelection: () => {
     set({
       selectedSnapshotId: null,
-      selectedSnapshot: null,
+      selectedSnapshot: null
     })
-  },
+  }
 }))

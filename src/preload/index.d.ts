@@ -4,7 +4,7 @@ import type {
   SnapshotMetadata,
   ScanProgress,
   ComparisonResult,
-  TrendData,
+  TrendData
 } from '../types'
 
 // 扩展 ElectronAPI
@@ -38,10 +38,7 @@ interface CustomElectronAPI {
       snapshotIdA: string
       snapshotIdB: string
     }) => Promise<ComparisonResult>
-    analyzeTrend: (payload: {
-      snapshotIds: string[]
-      targetPath: string
-    }) => Promise<TrendData>
+    analyzeTrend: (payload: { snapshotIds: string[]; targetPath: string }) => Promise<TrendData>
   }
 
   // System API

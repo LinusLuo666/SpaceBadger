@@ -43,21 +43,27 @@ git push origin main
 ## ✅ CI/CD 自动触发条件
 
 ### CI Workflow (`ci.yml`)
+
 **触发时机：**
+
 - ✅ 每次 `git push` 到 `main` 或 `develop` 分支
 - ✅ 每次创建 Pull Request 到 `main` 或 `develop`
 
 **检查内容：**
+
 - ESLint 代码规范
 - Prettier 格式检查
 - TypeScript 类型检查
 - 跨平台构建测试（Ubuntu/macOS/Windows）
 
 ### Release Workflow (`release.yml`)
+
 **触发时机：**
+
 - ✅ 推送版本 tag（格式：`v1.0.0`）
 
 **执行操作：**
+
 - 构建 macOS `.dmg` 安装包
 - 构建 Windows `.exe` 安装程序
 - 构建 Linux `.AppImage`/`.snap`/`.deb` 包
@@ -65,7 +71,9 @@ git push origin main
 - 上传所有安装包
 
 ### Test Workflow (`test.yml`)
+
 **触发时机：**
+
 - ✅ 每次 `git push` 到 `main` 或 `develop` 分支
 - ✅ 每次创建 Pull Request
 
@@ -97,6 +105,7 @@ gh run watch
 ### 方法 3：推送后的反馈
 
 推送后，你会在几秒内看到：
+
 ```bash
 remote:
 remote: Create a pull request for 'main' on GitHub by visiting:
@@ -115,6 +124,7 @@ To https://github.com/<username>/SpaceBadger.git
 ### ✅ 验证 Actions 已启用
 
 1. **访问 Actions 页面**
+
    ```
    https://github.com/<username>/SpaceBadger/actions
    ```
@@ -135,6 +145,7 @@ To https://github.com/<username>/SpaceBadger.git
 **可能的失败原因：**
 
 1. **ESLint 错误**
+
    ```bash
    # 本地修复
    pnpm lint --fix
@@ -144,6 +155,7 @@ To https://github.com/<username>/SpaceBadger.git
    ```
 
 2. **Prettier 格式问题**
+
    ```bash
    # 本地修复
    pnpm exec prettier --write .
@@ -153,6 +165,7 @@ To https://github.com/<username>/SpaceBadger.git
    ```
 
 3. **TypeScript 类型错误**
+
    ```bash
    # 检查错误
    pnpm typecheck
@@ -179,13 +192,13 @@ To https://github.com/<username>/SpaceBadger.git
 2. 点击 **"New repository secret"**
 3. 添加以下 secrets（可选）：
 
-| Secret Name | 用途 | 何时需要 |
-|-------------|------|----------|
-| `CSC_LINK` | macOS 代码签名证书（base64） | 发布正式版时 |
-| `CSC_KEY_PASSWORD` | macOS 证书密码 | 发布正式版时 |
-| `WIN_CSC_LINK` | Windows 代码签名证书 | 发布正式版时 |
-| `WIN_CSC_KEY_PASSWORD` | Windows 证书密码 | 发布正式版时 |
-| `CODECOV_TOKEN` | Codecov 集成 token | 需要代码覆盖率报告时 |
+| Secret Name            | 用途                         | 何时需要             |
+| ---------------------- | ---------------------------- | -------------------- |
+| `CSC_LINK`             | macOS 代码签名证书（base64） | 发布正式版时         |
+| `CSC_KEY_PASSWORD`     | macOS 证书密码               | 发布正式版时         |
+| `WIN_CSC_LINK`         | Windows 代码签名证书         | 发布正式版时         |
+| `WIN_CSC_KEY_PASSWORD` | Windows 证书密码             | 发布正式版时         |
+| `CODECOV_TOKEN`        | Codecov 集成 token           | 需要代码覆盖率报告时 |
 
 **注意：** `GITHUB_TOKEN` 是自动提供的，不需要手动配置。
 
@@ -196,11 +209,13 @@ To https://github.com/<username>/SpaceBadger.git
 ### Q1: 推送后没有看到 Actions 运行？
 
 **检查：**
+
 1. 确认 `.github/workflows/` 目录已推送
 2. 检查分支名是否匹配（`main` 或 `develop`）
 3. 查看 Actions 标签是否启用
 
 **解决：**
+
 ```bash
 # 确认文件已推送
 git ls-tree -r main --name-only | grep workflows
@@ -214,6 +229,7 @@ git ls-tree -r main --name-only | grep workflows
 ### Q2: CI 一直失败怎么办？
 
 **步骤：**
+
 1. 点击失败的 workflow 查看详细日志
 2. 找到红色 ❌ 的步骤
 3. 查看错误信息
@@ -221,6 +237,7 @@ git ls-tree -r main --name-only | grep workflows
 5. 重新提交并推送
 
 **本地预检命令：**
+
 ```bash
 # 运行所有 CI 会执行的检查
 pnpm lint
@@ -232,6 +249,7 @@ pnpm build
 ### Q3: 如何触发发布？
 
 **步骤：**
+
 ```bash
 # 1. 更新 package.json 版本号
 # "version": "1.0.0"
@@ -247,6 +265,7 @@ git push origin v1.0.0
 ```
 
 **然后：**
+
 - Release workflow 自动运行
 - 15-30 分钟后在 Releases 页面查看
 - 下载生成的安装包测试
@@ -254,11 +273,13 @@ git push origin v1.0.0
 ### Q4: 如何禁用某个 workflow？
 
 **方法 1：通过 GitHub 网站**
+
 1. 访问 Actions 页面
 2. 点击左侧要禁用的 workflow
 3. 点击右上角 "..." → "Disable workflow"
 
 **方法 2：删除 workflow 文件**
+
 ```bash
 git rm .github/workflows/test.yml
 git commit -m "ci: 暂时禁用测试 workflow"
@@ -268,11 +289,13 @@ git push
 ### Q5: 如何查看构建产物？
 
 **CI 构建产物：**
+
 1. 访问 workflow 运行页面
 2. 滚动到底部 "Artifacts" 部分
 3. 下载 `build-ubuntu-latest` / `build-macos-latest` 等
 
 **Release 构建产物：**
+
 1. 访问 `https://github.com/<username>/SpaceBadger/releases`
 2. 点击最新的 Release
 3. 在 "Assets" 部分下载安装包
@@ -333,12 +356,14 @@ git push origin v1.0.0
 ## 📌 总结
 
 ### ✅ 自动的（无需配置）
+
 - ✅ Workflow 启用
 - ✅ `GITHUB_TOKEN` 权限
 - ✅ 运行触发
 - ✅ 状态通知
 
 ### ⚙️ 手动的（仅在需要时）
+
 - ⚙️ 代码签名 Secrets
 - ⚙️ 第三方集成 tokens
 - ⚙️ Workflow 禁用/启用
@@ -346,6 +371,7 @@ git push origin v1.0.0
 ### 🎯 下一步
 
 1. **现在就推送代码：**
+
    ```bash
    git add .
    git commit -m "feat: 完成基础架构（Day 1-3）"

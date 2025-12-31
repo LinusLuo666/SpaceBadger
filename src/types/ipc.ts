@@ -51,7 +51,7 @@ export const IPC_CHANNELS = {
   /** 复制路径到剪贴板 */
   SYSTEM_COPY_PATH: 'system:copyPath',
   /** 获取应用版本 */
-  SYSTEM_GET_VERSION: 'system:getVersion',
+  SYSTEM_GET_VERSION: 'system:getVersion'
 } as const
 
 /**
@@ -199,13 +199,19 @@ export interface SetSettingPayload {
 export interface IPCInvokeAPI {
   [IPC_CHANNELS.SYSTEM_SELECT_FOLDER]: () => Promise<string | undefined>
   [IPC_CHANNELS.DB_SAVE_SNAPSHOT]: (payload: SaveSnapshotPayload) => Promise<void>
-  [IPC_CHANNELS.DB_LOAD_SNAPSHOTS]: (payload?: LoadSnapshotsPayload) => Promise<LoadSnapshotsResponse>
-  [IPC_CHANNELS.DB_LOAD_SNAPSHOT_BY_ID]: (payload: LoadSnapshotByIdPayload) => Promise<Snapshot | null>
+  [IPC_CHANNELS.DB_LOAD_SNAPSHOTS]: (
+    payload?: LoadSnapshotsPayload
+  ) => Promise<LoadSnapshotsResponse>
+  [IPC_CHANNELS.DB_LOAD_SNAPSHOT_BY_ID]: (
+    payload: LoadSnapshotByIdPayload
+  ) => Promise<Snapshot | null>
   [IPC_CHANNELS.DB_DELETE_SNAPSHOT]: (payload: DeleteSnapshotPayload) => Promise<void>
   [IPC_CHANNELS.DB_RENAME_SNAPSHOT]: (payload: RenameSnapshotPayload) => Promise<void>
   [IPC_CHANNELS.DB_GET_SETTING]: (payload: GetSettingPayload) => Promise<string | null>
   [IPC_CHANNELS.DB_SET_SETTING]: (payload: SetSettingPayload) => Promise<void>
-  [IPC_CHANNELS.COMPARE_SNAPSHOTS]: (payload: CompareSnapshotsPayload) => Promise<CompareSnapshotsResponse>
+  [IPC_CHANNELS.COMPARE_SNAPSHOTS]: (
+    payload: CompareSnapshotsPayload
+  ) => Promise<CompareSnapshotsResponse>
   [IPC_CHANNELS.ANALYZE_TREND]: (payload: AnalyzeTrendPayload) => Promise<AnalyzeTrendResponse>
   [IPC_CHANNELS.SYSTEM_GET_VERSION]: () => Promise<string>
 }
