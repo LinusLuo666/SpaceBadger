@@ -127,7 +127,7 @@ async function scanDirectory(
             result.size += stats.size
             result.fileCount++
             processedSize += stats.size
-          } catch (error) {
+          } catch {
             // 文件无法访问，跳过
           }
         })()

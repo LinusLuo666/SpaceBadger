@@ -160,7 +160,9 @@ export class ScannerManager {
     }
 
     console.log('[ScannerManager] Scan completed successfully')
-    console.log(`[ScannerManager] Total: ${message.totalFiles} files, ${message.totalFolders} folders`)
+    console.log(
+      `[ScannerManager] Total: ${message.totalFiles} files, ${message.totalFolders} folders`
+    )
     console.log(`[ScannerManager] Duration: ${message.scanDuration}ms`)
     console.log(`[ScannerManager] Inaccessible: ${message.inaccessiblePaths.length} paths`)
 
