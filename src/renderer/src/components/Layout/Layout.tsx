@@ -12,6 +12,7 @@ import { Sidebar } from '../Sidebar'
 import { ScanControl } from '../ScanControl'
 import { VisualizationContainer } from '../VisualizationContainer'
 import { SnapshotCard } from '../SnapshotCard'
+import { CompareView } from '../CompareView'
 
 export function Layout(): JSX.Element {
   const { currentView, theme, setTheme } = useUIStore()
@@ -168,32 +169,6 @@ function HistoryView(): JSX.Element {
           ))}
         </div>
       )}
-    </div>
-  )
-}
-
-/**
- * 对比视图（占位）
- */
-function CompareView(): JSX.Element {
-  return (
-    <div className="compare-view">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-2">快照对比</h2>
-        <p className="text-light-text-secondary dark:text-dark-text-secondary">
-          对比两个快照，查看空间变化趋势
-        </p>
-      </div>
-
-      <div className="bg-white dark:bg-dark-bg rounded-lg shadow-md p-12 text-center">
-        <div className="text-6xl mb-4">⚖️</div>
-        <h3 className="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
-          需要至少两个快照
-        </h3>
-        <p className="text-light-text-secondary dark:text-dark-text-secondary">
-          进行多次扫描后，您可以在这里对比不同时间点的空间占用情况
-        </p>
-      </div>
     </div>
   )
 }
