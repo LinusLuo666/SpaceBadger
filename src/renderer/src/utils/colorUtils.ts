@@ -65,7 +65,12 @@ export function getColorByDepth(depth: number, basePath?: string): string {
   if (basePath) {
     const baseColor = getColorForPath(basePath)
     // 根据深度调整明暗
-    return d3.color(baseColor)?.brighter(depth * 0.2).toString() || baseColor
+    return (
+      d3
+        .color(baseColor)
+        ?.brighter(depth * 0.2)
+        .toString() || baseColor
+    )
   }
 
   // 默认蓝色渐变
@@ -97,9 +102,7 @@ export function getDiffColor(diff: number, isDarkMode = false): string {
  */
 export function getHeatmapColor(size: number, maxSize: number): string {
   const ratio = size / maxSize
-  const scale = d3
-    .scaleSequential(d3.interpolateReds)
-    .domain([0, 1])
+  const scale = d3.scaleSequential(d3.interpolateReds).domain([0, 1])
 
   return scale(ratio)
 }

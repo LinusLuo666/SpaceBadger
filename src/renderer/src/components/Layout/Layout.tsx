@@ -7,9 +7,11 @@ import { useEffect } from 'react'
 import type { JSX } from 'react'
 import { useUIStore } from '../../store/useUIStore'
 import { useScannerStore } from '../../store/useScannerStore'
+import { useSnapshotStore } from '../../store/useSnapshotStore'
 import { Sidebar } from '../Sidebar'
 import { ScanControl } from '../ScanControl'
 import { VisualizationContainer } from '../VisualizationContainer'
+import { SnapshotCard } from '../SnapshotCard'
 
 export function Layout(): JSX.Element {
   const { currentView, theme, setTheme } = useUIStore()
@@ -75,9 +77,51 @@ function ScanView(): JSX.Element {
 }
 
 /**
- * 历史视图（占位）
+ * 历史视图
  */
 function HistoryView(): JSX.Element {
+  const { snapshots, isLoading, loadSnapshots, deleteSnapshot, renameSnapshot } = useSnapshotStore()
+  const { setSnapshot } = useScannerStore()
+  const { setView } = useUIStore()
+
+  // 加载快照列表
+  useEffect(() => {
+    loadSnapshots()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 加载快照并显示可视化
+  const handleLoadSnapshot = async (
+    snapshotMeta: import('../../../../types').SnapshotMetadata
+  ): Promise<void> => {
+    try {
+      // 加载完整快照数据（包含 rootNode）
+      const fullSnapshot = await window.electron.database.loadSnapshotById({
+        id: snapshotMeta.id
+      })
+
+      if (fullSnapshot) {
+        // 设置为当前快照
+        setSnapshot(fullSnapshot)
+        // 切换到扫描视图以显示可视化
+        setView('scan')
+      }
+    } catch (error) {
+      console.error('Failed to load snapshot:', error)
+      alert('加载快照失败，请重试')
+    }
+  }
+
+  // 删除快照
+  const handleDeleteSnapshot = async (id: string): Promise<void> => {
+    await deleteSnapshot(id)
+  }
+
+  // 重命名快照
+  const handleRenameSnapshot = async (id: string, newName: string): Promise<void> => {
+    await renameSnapshot(id, newName)
+  }
+
   return (
     <div className="history-view">
       <div className="mb-6">
@@ -87,15 +131,43 @@ function HistoryView(): JSX.Element {
         </p>
       </div>
 
-      <div className="bg-white dark:bg-dark-bg rounded-lg shadow-md p-12 text-center">
-        <div className="text-6xl mb-4">📚</div>
-        <h3 className="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
-          暂无历史记录
-        </h3>
-        <p className="text-light-text-secondary dark:text-dark-text-secondary">
-          完成首次扫描后，历史记录将显示在这里
-        </p>
-      </div>
+      {/* 加载状态 */}
+      {isLoading && snapshots.length === 0 && (
+        <div className="bg-white dark:bg-dark-bg rounded-lg shadow-md p-12 text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <h3 className="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
+            加载中...
+          </h3>
+        </div>
+      )}
+
+      {/* 空状态 */}
+      {!isLoading && snapshots.length === 0 && (
+        <div className="bg-white dark:bg-dark-bg rounded-lg shadow-md p-12 text-center">
+          <div className="text-6xl mb-4">📚</div>
+          <h3 className="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
+            暂无历史记录
+          </h3>
+          <p className="text-light-text-secondary dark:text-dark-text-secondary">
+            完成首次扫描后，历史记录将显示在这里
+          </p>
+        </div>
+      )}
+
+      {/* 快照列表 */}
+      {snapshots.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {snapshots.map((snapshot) => (
+            <SnapshotCard
+              key={snapshot.id}
+              snapshot={snapshot}
+              onLoad={handleLoadSnapshot}
+              onDelete={handleDeleteSnapshot}
+              onRename={handleRenameSnapshot}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

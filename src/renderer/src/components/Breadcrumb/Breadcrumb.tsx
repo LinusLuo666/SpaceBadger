@@ -11,13 +11,15 @@ interface BreadcrumbProps {
   className?: string
 }
 
-export function Breadcrumb({ currentPath, onNavigate, className = '' }: BreadcrumbProps): JSX.Element {
+export function Breadcrumb({
+  currentPath,
+  onNavigate,
+  className = ''
+}: BreadcrumbProps): JSX.Element {
   // 解析路径为面包屑项
   const parts = currentPath.split('/').filter(Boolean)
 
-  const breadcrumbs = [
-    { path: '/', label: parts[0] || 'Root' }
-  ]
+  const breadcrumbs = [{ path: '/', label: parts[0] || 'Root' }]
 
   // 构建完整路径
   for (let i = 1; i < parts.length; i++) {

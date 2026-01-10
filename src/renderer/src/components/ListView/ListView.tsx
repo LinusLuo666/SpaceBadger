@@ -54,7 +54,9 @@ export function ListView({ data, onNavigate, className = '' }: ListViewProps): J
   })
 
   return (
-    <div className={`list-view bg-white dark:bg-dark-bg rounded-lg shadow-md overflow-hidden ${className}`}>
+    <div
+      className={`list-view bg-white dark:bg-dark-bg rounded-lg shadow-md overflow-hidden ${className}`}
+    >
       <table className="w-full">
         <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
           <tr>
