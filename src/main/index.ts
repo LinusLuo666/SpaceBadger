@@ -5,6 +5,8 @@ import icon from '../../resources/icon.png?asset'
 import { IPC_CHANNELS } from '../types/ipc'
 import { DatabaseManager } from './database/DatabaseManager'
 import { ScannerManager } from './scanner/ScannerManager'
+import { ComparisonEngine } from './comparison/ComparisonEngine'
+import { TrendAnalyzer } from './analysis/TrendAnalyzer'
 import type {
   ScanStartPayload,
   SaveSnapshotPayload,
@@ -24,6 +26,10 @@ import type {
 let dbManager: DatabaseManager
 // 初始化扫描管理器
 let scannerManager: ScannerManager
+// 初始化对比引擎
+let comparisonEngine: ComparisonEngine
+// 初始化趋势分析器
+let trendAnalyzer: TrendAnalyzer
 
 function createWindow(): void {
   // Create the browser window.
@@ -194,18 +200,30 @@ function setupIPCHandlers(): void {
     }
   })
 
-  // ========== Comparison 对比分析相关（暂未实现，占位）==========
+  // ========== Comparison 对比分析相关 ==========
 
   ipcMain.handle(IPC_CHANNELS.COMPARE_SNAPSHOTS, async (_, payload: CompareSnapshotsPayload) => {
-    console.log('[Main] TODO: Implement snapshot comparison:', payload)
-    // TODO: 实现 ComparisonEngine 后返回对比结果
-    throw new Error('Comparison not yet implemented')
+    console.log('[Main] Comparing snapshots:', payload.snapshotIdA, 'vs', payload.snapshotIdB)
+    try {
+      const result = comparisonEngine.compareSnapshots(payload.snapshotIdA, payload.snapshotIdB)
+      console.log('[Main] Comparison complete')
+      return result
+    } catch (error) {
+      console.error('[Main] Failed to compare snapshots:', error)
+      throw error
+    }
   })
 
   ipcMain.handle(IPC_CHANNELS.ANALYZE_TREND, async (_, payload: AnalyzeTrendPayload) => {
-    console.log('[Main] TODO: Implement trend analysis:', payload)
-    // TODO: 实现 TrendAnalyzer 后返回趋势数据
-    throw new Error('Trend analysis not yet implemented')
+    console.log('[Main] Analyzing trend for path:', payload.targetPath)
+    try {
+      const result = trendAnalyzer.analyzeTrend(payload.snapshotIds, payload.targetPath)
+      console.log('[Main] Trend analysis complete')
+      return result
+    } catch (error) {
+      console.error('[Main] Failed to analyze trend:', error)
+      throw error
+    }
   })
 }
 
@@ -225,6 +243,12 @@ app.whenReady().then(() => {
 
   // 初始化数据库
   dbManager = new DatabaseManager()
+
+  // 初始化对比引擎
+  comparisonEngine = new ComparisonEngine(dbManager)
+
+  // 初始化趋势分析器
+  trendAnalyzer = new TrendAnalyzer(dbManager)
 
   // 设置 IPC 处理器
   setupIPCHandlers()
