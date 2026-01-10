@@ -11,6 +11,7 @@ import { Treemap, Tooltip } from '../Treemap'
 import { ListView } from '../ListView'
 import { Breadcrumb } from '../Breadcrumb'
 import { DetailPanel } from '../DetailPanel'
+import { Sunburst } from '../Sunburst'
 
 interface VisualizationContainerProps {
   snapshot: Snapshot
@@ -83,6 +84,16 @@ export function VisualizationContainer({
             📊 Treemap
           </button>
           <button
+            onClick={() => setVisualizationType('sunburst')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              visualizationType === 'sunburst'
+                ? 'bg-light-primary dark:bg-dark-primary text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-light-text dark:text-dark-text hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
+          >
+            ☀️ Sunburst
+          </button>
+          <button
             onClick={() => setVisualizationType('list')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               visualizationType === 'list'
@@ -130,6 +141,10 @@ export function VisualizationContainer({
                   <Tooltip node={hoveredNode} totalSize={snapshot.totalSize} />
                 </div>
               )}
+            </div>
+          ) : visualizationType === 'sunburst' ? (
+            <div className="h-full bg-white dark:bg-dark-bg rounded-lg shadow-md">
+              <Sunburst data={currentNode} onNodeClick={handleNavigateToPath} />
             </div>
           ) : (
             <ListView data={currentNode} onNavigate={handleNavigate} />
