@@ -11,6 +11,10 @@
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
@@ -41,6 +45,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^11.0.0",
     "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/ui": "^4.0.16",
     "autoprefixer": "^10.4.23",
     "electron": "^39.2.6",
     "electron-builder": "^26.0.12",
@@ -49,13 +54,15 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "happy-dom": "^20.1.0",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6"
+    "vite": "^7.2.6",
+    "vitest": "^4.0.16"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
