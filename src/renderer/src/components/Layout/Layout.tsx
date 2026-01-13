@@ -47,13 +47,34 @@ export function Layout(): JSX.Element {
  * 扫描视图
  */
 function ScanView(): JSX.Element {
-  const { currentSnapshot } = useScannerStore()
+  const { currentSnapshot, reset } = useScannerStore()
 
   // 如果有当前快照，显示可视化
   if (currentSnapshot) {
     return (
-      <div className="scan-view h-full">
-        <VisualizationContainer snapshot={currentSnapshot} className="h-full" />
+      <div className="scan-view h-full flex flex-col">
+        {/* 顶部操作栏 */}
+        <div className="bg-white dark:bg-dark-bg border-b border-gray-200 dark:border-gray-700 px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">
+              {currentSnapshot.name || '当前扫描'}
+            </h3>
+            <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+              {currentSnapshot.scanPath}
+            </span>
+          </div>
+          <button
+            onClick={reset}
+            className="px-4 py-2 bg-light-primary dark:bg-dark-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
+          >
+            新建扫描
+          </button>
+        </div>
+
+        {/* 可视化容器 */}
+        <div className="flex-1 overflow-hidden">
+          <VisualizationContainer snapshot={currentSnapshot} className="h-full" />
+        </div>
       </div>
     )
   }

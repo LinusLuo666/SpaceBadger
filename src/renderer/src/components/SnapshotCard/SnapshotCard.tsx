@@ -109,6 +109,7 @@ export function SnapshotCard({
         {/* 操作按钮 */}
         <div className="flex gap-2">
           <button
+            type="button"
             onClick={() => onLoad(snapshot)}
             className="flex-1 px-4 py-2 bg-light-primary dark:bg-dark-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
           >
@@ -117,6 +118,7 @@ export function SnapshotCard({
 
           {onRename && (
             <button
+              type="button"
               onClick={handleRename}
               className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-light-text dark:text-dark-text rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm"
               title="重命名"
@@ -126,6 +128,7 @@ export function SnapshotCard({
           )}
 
           <button
+            type="button"
             onClick={handleDelete}
             className="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-sm"
             title="删除"

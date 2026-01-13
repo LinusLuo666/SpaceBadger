@@ -4,6 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest'
 import { TrendAnalyzer } from '../analysis/TrendAnalyzer'
+import type { DatabaseManager } from '../database/DatabaseManager'
 import type { Snapshot, FolderNode } from '../../types'
 
 // Mock DatabaseManager
@@ -61,7 +62,8 @@ describe('TrendAnalyzer', () => {
 
   beforeEach(() => {
     mockDb = new MockDatabaseManager()
-    trendAnalyzer = new TrendAnalyzer(mockDb as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    trendAnalyzer = new TrendAnalyzer(mockDb as any as DatabaseManager)
   })
 
   describe('analyzeTrend', () => {

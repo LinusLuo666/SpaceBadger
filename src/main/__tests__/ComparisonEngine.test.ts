@@ -2,8 +2,9 @@
  * ComparisonEngine 测试
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { ComparisonEngine } from '../comparison/ComparisonEngine'
+import type { DatabaseManager } from '../database/DatabaseManager'
 import type { Snapshot, FolderNode } from '../../types'
 
 // Mock DatabaseManager
@@ -61,7 +62,8 @@ describe('ComparisonEngine', () => {
 
   beforeEach(() => {
     mockDb = new MockDatabaseManager()
-    comparisonEngine = new ComparisonEngine(mockDb as any)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    comparisonEngine = new ComparisonEngine(mockDb as any as DatabaseManager)
   })
 
   describe('compareSnapshots', () => {
@@ -71,14 +73,24 @@ describe('ComparisonEngine', () => {
         createMockFolderNode('/test/dir1', 'dir1', 1000),
         createMockFolderNode('/test/dir2', 'dir2', 1000)
       ])
-      const snapshotA = createMockSnapshot('snapshot-a', 'Snapshot A', rootA, new Date('2024-01-01'))
+      const snapshotA = createMockSnapshot(
+        'snapshot-a',
+        'Snapshot A',
+        rootA,
+        new Date('2024-01-01')
+      )
 
       // 创建快照 B（dir1 增长，dir2 减少）
       const rootB = createMockFolderNode('/test', 'test', 2500, [
         createMockFolderNode('/test/dir1', 'dir1', 1800), // 增长 800
         createMockFolderNode('/test/dir2', 'dir2', 700) // 减少 300
       ])
-      const snapshotB = createMockSnapshot('snapshot-b', 'Snapshot B', rootB, new Date('2024-01-10'))
+      const snapshotB = createMockSnapshot(
+        'snapshot-b',
+        'Snapshot B',
+        rootB,
+        new Date('2024-01-10')
+      )
 
       mockDb.addSnapshot(snapshotA)
       mockDb.addSnapshot(snapshotB)

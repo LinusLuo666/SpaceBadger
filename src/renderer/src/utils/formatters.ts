@@ -10,12 +10,16 @@
 export function formatSize(bytes: number): string {
   if (bytes === 0) return '0 B'
 
+  // 处理负数
+  const isNegative = bytes < 0
+  const absBytes = Math.abs(bytes)
+
   const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
   const k = 1024
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  const size = bytes / Math.pow(k, i)
+  const i = Math.floor(Math.log(absBytes) / Math.log(k))
+  const size = absBytes / Math.pow(k, i)
 
-  return `${size.toFixed(2)} ${units[i]}`
+  return `${isNegative ? '-' : ''}${size.toFixed(2)} ${units[i]}`
 }
 
 /**

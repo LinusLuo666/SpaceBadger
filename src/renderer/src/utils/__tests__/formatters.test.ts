@@ -24,10 +24,10 @@ describe('formatSize', () => {
   })
 
   it('应该处理负数', () => {
-    // 注意：当前实现对负数处理有bug，会返回'NaN undefined'
-    // 这个测试标记当前行为，如果未来修复了负数处理，应该更新这个测试
-    expect(formatSize(-1024)).toBe('NaN undefined')
-    expect(formatSize(-1048576)).toBe('NaN undefined')
+    // 负数应该正确格式化，显示负号
+    expect(formatSize(-1024)).toBe('-1.00 KB')
+    expect(formatSize(-1048576)).toBe('-1.00 MB')
+    expect(formatSize(-1536)).toBe('-1.50 KB')
   })
 
   it('应该正确四舍五入', () => {

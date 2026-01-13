@@ -60,7 +60,7 @@ export class ScannerManager {
     console.log(`[ScannerManager] Starting scan of: ${scanPath}`)
 
     // 创建 Worker
-    const workerPath = path.join(__dirname, '../workers/scanner.worker.js')
+    const workerPath = path.join(__dirname, 'workers/scanner.worker.js')
     this.currentWorker = new Worker(workerPath, {
       workerData: {
         rootPath: scanPath,
